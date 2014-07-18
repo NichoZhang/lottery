@@ -15233,6 +15233,16 @@ $file_data_arr = array (
     5 => '30',
     6 => '07',
   ),
+  1519 => 
+  array (
+    0 => '08',
+    1 => '14',
+    2 => '22',
+    3 => '24',
+    4 => '27',
+    5 => '29',
+    6 => '10',
+  ),
 );
 /*
 $i = 0;  
@@ -15270,6 +15280,7 @@ print_r($code_end-$code_start);
 	当18号球出现的时候
 		从未出现2，3两个号球
 */
+$count_i = array();
 $i = 0;
 $red_ball_arr = array();
 //固定7个位置
@@ -15289,12 +15300,31 @@ for($i;$i<7;$i++){
 				array_push($arr[$i][$a],$value_v[0],$value_v[1],$value_v[2],$value_v[3],$value_v[4],$value_v[5]);
 			}
 			++$j;
+			$count_i[$i+1][$a+1] = array_count_values($arr[$i][$a]);
 			//将合集中内容去重，保证最多只剩下33个红色的球的单一个体
-			$result = array_unique($arr[$i][$a]);
-			$red_ball_arr[$i+1][$a+1] = array_diff($diff_arr,$result);
+//			$result = array_unique($arr[$i][$a]);
+//			$red_ball_arr[$i+1][$a+1] = array_diff($diff_arr,$result);
 		}
 	}
 }
-file_put_contents(dirname(__FILE__).'/../php/fifth.php',"<?php \$test = ".var_export($red_ball_arr,true));
+file_put_contents(dirname(__FILE__).'/../php/seventh.php',var_export($count_i,true));
+/*
+file_put_contents(dirname(__FILE__).'/../php/fourth.php','<?php 
+$code_start = microtime(true);
+$test = '.var_export($red_ball_arr,true).';
+$test2 = array();
+foreach($test as $key => $value){
+	foreach($value as $kk => $vv){
+		if(count($vv) !== 33 && !empty($vv)){
+			$test2[$key][$kk] = $vv;
+		}
+	}
+}
+file_put_contents(dirname(__FILE__).\'/../php/sixth.php\',\'<?php 
+$test = \'.var_export($test2,true).\';\');
+$code_end = microtime(true);
+print_r($code_end-$code_start);
+');
+*/
 $code_end = microtime(true);
 print_r($code_end-$code_start);
