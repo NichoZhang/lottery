@@ -2396,7 +2396,6 @@ $test = array (
     16 => 
     array (
       24 => '25',
-      28 => '29',
     ),
     17 => 
     array (
@@ -3888,11 +3887,7 @@ foreach($test as $key => $value){
 		}
 	}
 }
-file_put_contents(dirname(__FILE__).'/../php/fifth.php','<?php 
-$code_start = microtime(true);
-$test = '.var_export($test2,true).';
-$code_end = microtime(true);
-print_r($code_end-$code_start);
-');
+file_put_contents(dirname(__FILE__).'/../php/sixth.php','<?php 
+$test = '.var_export($test2,true).';');
 $code_end = microtime(true);
 print_r($code_end-$code_start);

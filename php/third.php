@@ -15243,6 +15243,76 @@ $file_data_arr = array (
     5 => '29',
     6 => '10',
   ),
+  1520 =>
+  array(
+    0 => '02',
+    1 => '04',
+    2 => '20',
+    3 => '25',
+    4 => '26',
+    5 => '29',
+    6 => '11',
+  ),
+  1521 =>
+  array(
+    0 => '05',
+    1 => '06',
+    2 => '19',
+    3 => '21',
+    4 => '23',
+    5 => '33',
+    6 => '12',
+  ),
+  1522 =>
+  array(
+    0 => '01',
+    1 => '06',
+    2 => '09',
+    3 => '10',
+    4 => '13',
+    5 => '25',
+    6 => '08',
+  ),
+  1523 =>
+  array(
+    0 => '01',
+    1 => '02',
+    2 => '11',
+    3 => '19',
+    4 => '23',
+    5 => '29',
+    6 => '08',
+  ),
+  1524 =>
+  array(
+    0 => '02',
+    1 => '04',
+    2 => '10',
+    3 => '12',
+    4 => '24',
+    5 => '30',
+    6 => '08',
+  ),
+  1525 =>
+  array(
+    0 => '06',
+    1 => '18',
+    2 => '22',
+    3 => '23',
+    4 => '32',
+    5 => '33',
+    6 => '06',
+  ),
+  1526 =>
+  array(
+    0 => '03',
+    1 => '06',
+    2 => '11',
+    3 => '14',
+    4 => '16',
+    5 => '29',
+    6 => '15',
+  ),
 );
 /*
 $i = 0;  
@@ -15302,13 +15372,13 @@ for($i;$i<7;$i++){
 			++$j;
 			$count_i[$i+1][$a+1] = array_count_values($arr[$i][$a]);
 			//将合集中内容去重，保证最多只剩下33个红色的球的单一个体
-//			$result = array_unique($arr[$i][$a]);
-//			$red_ball_arr[$i+1][$a+1] = array_diff($diff_arr,$result);
+			$result = array_unique($arr[$i][$a]);
+			$red_ball_arr[$i+1][$a+1] = array_diff($diff_arr,$result);
 		}
 	}
 }
-file_put_contents(dirname(__FILE__).'/../php/seventh.php',var_export($count_i,true));
-/*
+//file_put_contents(dirname(__FILE__).'/../php/seventh.php',var_export($count_i,true));
+
 file_put_contents(dirname(__FILE__).'/../php/fourth.php','<?php 
 $code_start = microtime(true);
 $test = '.var_export($red_ball_arr,true).';
@@ -15325,6 +15395,6 @@ $test = \'.var_export($test2,true).\';\');
 $code_end = microtime(true);
 print_r($code_end-$code_start);
 ');
-*/
+/**/
 $code_end = microtime(true);
 print_r($code_end-$code_start);
