@@ -3887,7 +3887,7 @@ foreach($test as $key => $value){
 		}
 	}
 }
-file_put_contents(dirname(__FILE__).'/../php/sixth.php','<?php 
+file_put_contents(dirname(__FILE__).'\sixth.php','<?php 
 $test = '.var_export($test2,true).';');
 $code_end = microtime(true);
 print_r($code_end-$code_start);
