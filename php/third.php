@@ -50,12 +50,14 @@ $count_i = array();
 $i = 0;
 $red_ball_arr = array();
 $result = array();
+$site_data = array();
 //固定7个位置
 for($i;$i<7;++$i){
 	$a = 0;
 	//将数据进行循环，找到对应的红球在不同位置的落点
 	for($a;$a<33;++$a){
 		$arr[$i][$a] = array();
+		$site_data[$i][$a] = array();
 		$j = 0;
 		foreach($file_data_arr as $key => $value_v){			
 			//分割每次数据，将每期数据分割为7个落点
@@ -64,23 +66,10 @@ for($i;$i<7;++$i){
 				array_push($arr[$i][$a],$value_v[0],$value_v[1],$value_v[2],$value_v[3],$value_v[4],$value_v[5]);
 				//将合集中内容去重，保证最多只剩下33个红色的球的单一个体
 				$arr[$i][$a] = array_unique($arr[$i][$a]);
+				//新数据整理，将一号球位置是1的数据整理出来，类推
+				$site_data[$i][$a][$key] = $value_v;
 			}
 			/*
-			//因为在最外层是循环六次，BUG
-			$count_a[$i+1][$a+1] = count($arr[$i][$a]);
-			//计算出剩余数字的出现的次数
-			$temp_count = array_count_values($arr[$i][$a]);
-			//将红球进行排序，以便于观看
-			ksort($temp_count);
-			//将排列好的数据，进行放置，准备输出
-			$count_i[$i+1][$a+1] = $temp_count;
-			//每个球在每个位置出现的次数
-			//例如，2号球，在第一个位置出现过46次
-			$count_i[$i+1][$a+1] = array_count_values($arr[$i][$a]);
-			/*
-			/*
-			//将合集中内容去重，保证最多只剩下33个红色的球的单一个体
-			$result = array_unique($arr[$i][$a]);
 			//array_diff 在处理大数组的时候时间超长，采用另外一种方式
 			//但效果反而更不明显，故打算将数据整理完成转移到外部统一处理
 			$red_ball_arr[$i+1][$a+1] = array_diff($diff_arr,$result);
@@ -89,8 +78,69 @@ for($i;$i<7;++$i){
 		}
 	}
 }
+//拆分文件
+file_put_contents(dirname(__FILE__).'\\seventh'.date("Ymd").'.php','<?php
+$data = '.var_export($site_data,true).';
+$data_temp = array();
+foreach($data as $key =>$value){
+	foreach($value as $kk => $vv){
+		$flag = 0;
+		foreach($vv as $kkk => $vvv){
+			$data_temp[$key][$kk][$kkk] = $kkk - $flag -1;
+			$flag = $kkk;
+		}
+	}
+}
+file_put_contents(dirname(__FILE__).\'\\nineth\'.date("Ymd").\'.php\',\'<?php
+$data = '.var_export($data_temp,true).';');
+');
 
-file_put_contents(dirname(__FILE__).'\\fourth.php','<?php 
+//算出现红篮球的概率文件
+file_put_contents(dirname(__FILE__).'\\eighth'.date("Ymd").'.php','<?php
+$code_start = microtime(true);
+$site_data = '.var_export($site_data,true).';
+$keys_arr = array();
+foreach($site_data as $key => $value){
+	foreach($value as $kk => $vv){
+		//获取该位置，该号码，出现的期数
+		//在不同位置的不同号球出现的概率
+		if(count(array_keys($vv))/1529*100 != 0){
+			$keys_arr[$key+1][$kk+1] = count(array_keys($vv))/1529*100;
+		}
+	}
+}
+unset($key,$value,$kk,$vv);
+$keys_arr_sort = array();
+foreach($keys_arr as $key => $value){
+	arsort($value);
+	$keys_arr_sort[$key] = $value;
+}
+file_put_contents(dirname(__FILE__)."\\\..\\\data\\\red_balls_site_rate".date(\'Ymd\').".php",var_export($keys_arr_sort,true));
+$code_end = microtime(true);
+echo "\n";
+print_r($code_end-$code_start);
+/*
+---------- php ----------
+每个球在不同位置出现的过情况
+array (
+  1 => 22,//1号位置出现过22个球
+  2 => 26,//2号位置出现过26个球
+  3 => 27,//2号位置出现过27个球
+  4 => 27,//4号位置出现过27个球
+  5 => 26,//5号位置出现过26个球
+  6 => 21,//6号位置出现过21个球
+  7 => 16,//7号位置出现过26个球
+);
+2014年8月8日 11:27:34
+到目前为止出现频率最高的号码组为
+01 07 14 17 26 33 11
+到目前为止出现过但出现的频率最低的号码组合为
+19 28 29 5 9 11 4
+*/
+');
+
+//第一个想法，将不同位置的不同球出现的所有数据展示文件
+file_put_contents(dirname(__FILE__).'\\fourth'.date("Ymd").'.php','<?php 
 $code_start = microtime(true);
 $test = '.var_export($red_ball_arr,true).';
 $test2 = array();
@@ -101,7 +151,7 @@ foreach($test as $key => $value){
 		}
 	}
 }
-file_put_contents(dirname(__FILE__).\'\\sixth.php\',\'<?php 
+file_put_contents(dirname(__FILE__).\'\\sixth\'.date("Ymd").\'.php\',\'<?php 
 $test = \'.var_export($test2,true).\';\');
 $code_end = microtime(true);
 print_r($code_end-$code_start);
