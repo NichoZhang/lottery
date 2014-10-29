@@ -5,8 +5,7 @@ $file = dirname(__FILE__).'/../data/data_new.php';
 
 $file_data = file_get_contents($file);
 $file_data_arr_all = explode("\n",$file_data);
-$file_data_arr_all_filter = array_filter($file_data_arr_all);
-foreach($file_data_arr_all_filter as $every_balls){
+foreach($file_data_arr_all as $every_balls){
 	$temp = rtrim($every_balls);
 	$file_data_arr[] = explode(" ",$temp);
 }
@@ -59,6 +58,7 @@ for($i;$i<7;++$i){
 	for($a;$a<33;++$a){
 		$arr[$i][$a] = array();
 		$site_data[$i][$a] = array();
+		$j = 0;
 		foreach($file_data_arr as $key => $value_v){			
 			//分割每次数据，将每期数据分割为7个落点
 			//例如，当第一个位置是01号球时，其他位置出现过的号球的集合
@@ -82,26 +82,21 @@ for($i;$i<7;++$i){
 file_put_contents(dirname(__FILE__).'\\seventh'.date("Ymd").'.php','<?php
 $data = '.var_export($site_data,true).';
 $data_temp = array();
-
 foreach($data as $key =>$value){
 	foreach($value as $kk => $vv){
 		$flag = 0;
 		foreach($vv as $kkk => $vvv){
-			$data_temp[$key+1][$kk+1][$kkk] = $kkk - $flag -1;
+			$data_temp[$key][$kk][$kkk] = $kkk - $flag -1;
 			$flag = $kkk;
-		}
-		if(isset($data_temp[$key+1][$kk+1])){
-			arsort($data_temp[$key+1][$kk+1]);
 		}
 	}
 }
-unset($key,$value,$kk,$vv,$kkk,$vvv);
-//找到最长间隔时间的期数和对应位置的号球
-file_put_contents(dirname(__FILE__).\'\nineth\'.date("Ymd").\'.php\',\'<?php
-$data = \'.var_export($data_temp,true).\';\');');
+file_put_contents(dirname(__FILE__).\'\\nineth\'.date("Ymd").\'.php\',\'<?php
+$data = '.var_export($data_temp,true).';');
+');
 
 //算出现红篮球的概率文件
-file_put_contents(dirname(__FILE__).'\eighth'.date("Ymd").'.php','<?php
+file_put_contents(dirname(__FILE__).'\\eighth'.date("Ymd").'.php','<?php
 $code_start = microtime(true);
 $site_data = '.var_export($site_data,true).';
 $keys_arr = array();
