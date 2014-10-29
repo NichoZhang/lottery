@@ -1,7 +1,7 @@
 <?php
 $file = dirname(__FILE__).'/../data/data.php';
 
-$url = 'http://zx.caipiao.163.com/trend/ssq_basic.html?beginPeriod=2014002&endPeriod=2015060&historyPeriod=2014053&year=';
+$url = 'http://zx.caipiao.163.com/trend/ssq_basic.html?beginPeriod=2014090&endPeriod=2014124&historyPeriod=2014053&year=';
 $contents = file_get_contents($url);
 $regexRed = "/.*?<td class=\"chartBall\s*(.*?)\s*<\/td>.*?/";
 $regexBlue = "/.*?<td class=\"chartBall02\">\s*(.*?)\s*<\/td>.*?/";
