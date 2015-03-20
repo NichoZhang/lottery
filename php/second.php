@@ -1,7 +1,7 @@
 <?php
 $code_start = microtime(true);
-$file = dirname(__FILE__).'/../data/data.php';
-$file_new = dirname(__FILE__).'/../data/data_new_141027.php';
+$file = dirname(__FILE__).'/../data/data150320.php';
+$file_new = dirname(__FILE__).'/../data/data_new_'.date("ymd").'.php';
 $file_data = file_get_contents($file);
 $file_temp_arr = explode('  ',$file_data);
 $file_arr = array_filter($file_temp_arr);
