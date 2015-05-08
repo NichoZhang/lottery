@@ -19,7 +19,7 @@ foreach($source_data_arr_filter as $each_source_data){
 }
 file_put_contents($file_out, $put_out_data);
 */
-print_r(handle_data($source_data_arr_filter, "02 11 13 18 25 27 01"));
+print_r(handle_data($source_data_arr_filter, "03 10 12 13 16 26 12"));
 function handle_data($source_data_arr_filter, $eg, $flag=true){
 	$result = '';
 	//初始化一等奖数量
