@@ -1,9 +1,9 @@
 <?php
 //$eg = '01 05 07 22 26 32 11';
-//Êý¾ÝµØÖ·Â·¾¶ the data path
+//æ•°æ®åœ°å€è·¯å¾„ the data path
 $file = dirname(__FILE__).'/../data/2003-2015.csv';
 $file_out = dirname(__FILE__).'/../data/all_hitory_hit'.date("ymd").'.csv';
-//»ñÈ¡Êý¾Ý get the data
+//èŽ·å–æ•°æ® get the data
 $source_data = file_get_contents($file);
 $source_data_arr = explode("\n", $source_data);
 $source_data_arr_filter = array_filter($source_data_arr);
@@ -22,40 +22,39 @@ file_put_contents($file_out, $put_out_data);
 print_r(handle_data($source_data_arr_filter, "02 11 13 18 25 27 01"));
 function handle_data($source_data_arr_filter, $eg, $flag=true){
 	$result = '';
-	//³õÊ¼»¯Ò»µÈ½±ÊýÁ¿
+	//åˆå§‹åŒ–ä¸€ç­‰å¥–æ•°é‡
 	$first_prize = 0;
 	$first_prize_str = "";
-	//³õÊ¼»¯¶þµÈ½±ÊýÁ¿
+	//åˆå§‹åŒ–äºŒç­‰å¥–æ•°é‡
 	$second_prize = 0;
 	$second_prize_str = "";
-	//³õÊ¼»¯ÈýµÈ½±ÊýÁ¿
+	//åˆå§‹åŒ–ä¸‰ç­‰å¥–æ•°é‡
 	$third_prize = 0;
 	$third_prize_str = "";
-	//³õÊ¼»¯ËÄµÈ½±ÊýÁ¿
+	//åˆå§‹åŒ–å››ç­‰å¥–æ•°é‡
 	$fourth_prize = 0;
 	$fourth_prize_str = "";
-	//³õÊ¼»¯ÎåµÈ½±ÊýÁ¿
+	//åˆå§‹åŒ–äº”ç­‰å¥–æ•°é‡
 	$fifth_prize = 0;
 	$fifth_prize_str = "";
-	//³õÊ¼»¯ÁùµÈ½±ÊýÁ¿
+	//åˆå§‹åŒ–å…­ç­‰å¥–æ•°é‡
 	$sixth_prize = 0;
 	$sixth_prize_str = "";
-
 	foreach($source_data_arr_filter as $each_source_data){
 		preg_match("/\"([^\"]*)\"/", $each_source_data, $matches);
 		$each_date_arr = explode("|", $matches[1]);
 		$data = explode(",", $each_date_arr[0]);
-		//·Ö¸îÓûÇóÊý×Ö
+		//åˆ†å‰²æ¬²æ±‚æ•°å­—
 		$eg_arr = explode(" ", $eg);
-		//·Ö¸îÃ¿ÆÚÊý×Ö
+		//åˆ†å‰²æ¯æœŸæ•°å­—
 		$each_arr = explode(",", $each_date_arr[0]);
-		//³õÊ¼»¯ÓûÇóÊý×ÖÔÚÒÑÖªÊý¾ÝÇ°Áù¸öÖÐµÄ³öÏÖ´ÎÊý
+		//åˆå§‹åŒ–æ¬²æ±‚æ•°å­—åœ¨å·²çŸ¥æ•°æ®å‰å…­ä¸ªä¸­çš„å‡ºçŽ°æ¬¡æ•°
 		$n = 0;
-		//³õÊ¼»¯ÓûÇóÊý×ÖÖÐµÚÆß¸öÊý×Ö³öÏÖµÄ´ÎÊý
+		//åˆå§‹åŒ–æ¬²æ±‚æ•°å­—ä¸­ç¬¬ä¸ƒä¸ªæ•°å­—å‡ºçŽ°çš„æ¬¡æ•°
 		$m = 0;
-		//Ñ­»·¿ªÊ¼
+		//å¾ªçŽ¯å¼€å§‹
 		for($i = 0; $i < 7; ++$i){
-			//ÅÐ¶ÏÇ°ÁùÎ»ÖÐÊÇ·ñ³öÏÖ£¬²¢¼ÇÂ¼µ½³öÏÖ´ÎÊýÖÐ
+			//åˆ¤æ–­å‰å…­ä½ä¸­æ˜¯å¦å‡ºçŽ°ï¼Œå¹¶è®°å½•åˆ°å‡ºçŽ°æ¬¡æ•°ä¸­
 			if($i < 6){
 				if(in_array($eg_arr[$i], $each_arr)){
 					$n++;
@@ -66,58 +65,58 @@ function handle_data($source_data_arr_filter, $eg, $flag=true){
 				}
 			}
 		}
-		//Ò»µÈ½± 6+1
+		//ä¸€ç­‰å¥– 6+1
 		if($n == 6 && $m == 1){
 			$first_prize++;
 			$first_prize_str .= $each_source_data;
 		}
-		//¶þµÈ½± 6+0
+		//äºŒç­‰å¥– 6+0
 		if($n == 6 && $m == 0){
 			$second_prize++;
 			$second_prize_str .= $each_source_data;
 		}
-		//ÈýµÈ½± 5+1
+		//ä¸‰ç­‰å¥– 5+1
 		if($n == 5 && $m == 1){
 			$third_prize++;
 			$third_prize_str .= $each_source_data;
 		}
-		//ËÄµÈ½± 5+0/4+1
+		//å››ç­‰å¥– 5+0/4+1
 		if($n == 5 && $m == 0 || $n == 4 && $m == 1){
 			$fourth_prize++;
 			$fourth_prize_str .= $each_source_data;
 		}
-		//ÎåµÈ½± 4+0/3+1
+		//äº”ç­‰å¥– 4+0/3+1
 		if($n == 4 && $m == 0 || $n == 3 && $m == 1){
 			$fifth_prize++;
 			$fifth_prize_str .= $each_source_data;
 		}
-		//ÁùµÈ½± 2+1/1+1/0+1
+		//å…­ç­‰å¥– 2+1/1+1/0+1
 		if($n == 2 && $m == 1 || $n == 1 && $m == 1 || $n == 0 && $m == 1){
 			$sixth_prize++;
 			$sixth_prize_str .= $each_source_data;
 		}
 	}
 	if($flag){
-		$result = 'Ò»µÈ½± '.$first_prize.' ´Î£»¶þµÈ½± '.$second_prize.' ´Î£»ÈýµÈ½± '.$third_prize.' ´Î£»ËÄµÈ½± '.$fourth_prize.' ´Î£»ÎåµÈ½± '.$fifth_prize.' ´Î;ÁùµÈ½± '.$sixth_prize.' ´Î¡£';
+		$result = 'ä¸€ç­‰å¥– '.$first_prize.' æ¬¡ï¼›äºŒç­‰å¥– '.$second_prize.' æ¬¡ï¼›ä¸‰ç­‰å¥– '.$third_prize.' æ¬¡ï¼›å››ç­‰å¥– '.$fourth_prize.' æ¬¡ï¼›äº”ç­‰å¥– '.$fifth_prize.' æ¬¡;å…­ç­‰å¥– '.$sixth_prize.' æ¬¡ã€‚';
 	}else{
-		$result = 'Ò»µÈ½± '.$first_prize.' ´Î£»
-ÆÚÊýÎª
+		$result = 'ä¸€ç­‰å¥– '.$first_prize.' æ¬¡ï¼›
+æœŸæ•°ä¸º
 '.$first_prize_str.';
-¶þµÈ½± '.$second_prize.' ´Î£»
-ÆÚÊýÎª
+äºŒç­‰å¥– '.$second_prize.' æ¬¡ï¼›
+æœŸæ•°ä¸º
 '.$second_prize_str.';
-ÈýµÈ½± '.$third_prize.' ´Î£»
-ÆÚÊýÎª
+ä¸‰ç­‰å¥– '.$third_prize.' æ¬¡ï¼›
+æœŸæ•°ä¸º
 '.$third_prize_str.';
-ËÄµÈ½± '.$fourth_prize.' ´Î£»
-ÆÚÊýÎª
+å››ç­‰å¥– '.$fourth_prize.' æ¬¡ï¼›
+æœŸæ•°ä¸º
 '.$fourth_prize_str.';
-ÎåµÈ½± '.$fifth_prize.' ´Î;
-ÆÚÊýÎª
+äº”ç­‰å¥– '.$fifth_prize.' æ¬¡;
+æœŸæ•°ä¸º
 '.$fifth_prize_str.';
-ÁùµÈ½± '.$sixth_prize.' ´Î;
-ÆÚÊýÎª
-'.$sixth_prize_str.'¡£';
+å…­ç­‰å¥– '.$sixth_prize.' æ¬¡;
+æœŸæ•°ä¸º
+'.$sixth_prize_str.'ã€‚';
 	}
 	return $result;
 }
