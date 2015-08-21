@@ -50,7 +50,8 @@ function blue_balls_rate($data, $all_blueBalls)
     foreach($next_blueBall as $k => $v){
         foreach($v as $kk => $vv){
             if('all' != $k)
-         $return[$k][$kk] = $vv/$next_blueBall['all'][$k];
+            //将数字索引前添加一个字母，防止转换时，数字索引和字母索引同时存在
+         $return[$k]["r_".($kk)] = $vv/$next_blueBall['all'][$k];
         }
     }
     foreach($return as $blue_ball => $other_ball){
