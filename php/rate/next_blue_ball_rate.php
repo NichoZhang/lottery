@@ -44,20 +44,20 @@ function blue_balls_rate($data, $all_blueBalls)
     ksort($next_blueBall);
     foreach($next_blueBall as $key => $value){
         if($key != 'all')
-        $next_blueBall[$key] = array_count_values($value);
+            $next_blueBall[$key] = array_count_values($value);
     }
     $return = array();
     foreach($next_blueBall as $k => $v){
         foreach($v as $kk => $vv){
-            if('all' != $k)
-            //将数字索引前添加一个字母，防止转换时，数字索引和字母索引同时存在
-         $return[$k]["r_".($kk)] = $vv/$next_blueBall['all'][$k];
+            if($key != 'all')
+                //将数字索引前添加一个字母，防止转换时，数字索引和字母索引同时存在
+                $return[$k]["r_".($kk)] = $vv/$next_blueBall['all'][$k];
         }
     }
     foreach($return as $blue_ball => $other_ball){
         arsort($other_ball);
         $return[$blue_ball] = $other_ball;
     }
-    
+
     return $return;
 }/*}}}*/

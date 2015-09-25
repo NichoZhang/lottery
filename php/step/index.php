@@ -1,114 +1,171 @@
 <?php
-$file = dirname(__FILE__).'/../data/data'.date("ymd").'.php';
+//自动追加数据
+$file = __DIR__. '/../../data/2003-2014.sort.txt';
 
-$url = 'http://caipiao.baidu.com/lottery/draw/phase_result_download.php?file_format=array&lottery_type=50&year=2015';
-//$url = 'http://zx.caipiao.163.com/trend/ssq_basic.html?beginPeriod=2015010&endPeriod=2015030&historyPeriod=2015030&year=';
+$get_last_period  = getLastPeriod($file);
+$period_arr       = getNowPeriod($get_last_period);
+$begin_period_arr = each($period_arr);
+$end_period_arr   = array_slice($period_arr, -1, count($period_arr), true);
+$each_end_period  = each($end_period_arr);
+
+$begin_period = $begin_period_arr['key'];
+$end_period   = $each_end_period['key'];
+
+if (($end_period - $begin_period) <= 0) {
+    return;
+}
+
+$url = 'http://trend.caipiao.163.com/ssq/?beginPeriod='
+    . $begin_period
+    . '&endPeriod='
+    . $end_period;
+
 $contents = file_get_contents($url);
-$regexRed = "/.*?<td class=\"chartBall\s*(.*?)\s*<\/td>.*?/";
-$regexBlue = "/.*?<td class=\"chartBall02\">\s*(.*?)\s*<\/td>.*?/";
-preg_match_all($regexRed,$contents,$str1);
-preg_match_all($regexBlue,$contents,$str2);
-$str = '';
-foreach($str1[1] as $redball){
-	$str .=substr($redball,-2).'  ';
-}
-file_put_contents($file,$str);
-exit;
+$pattern = '#class="ball_[^"].*?".*?\s>(\d{2})<\/td>#';
 
-$contents = file_get_contents($file);
-$nums = explode('  ',$contents);
-$str = '';
-$temp = array();
-$i = '1';
-foreach($nums as $key=> $ball){
-	if($key!= 0 && $key%7 == 0){ 
-		echo "<br>";
-		$i++;
-	}
-	echo $ball.' ';
-}
-print_r($i);
-$a = 0;
-for($a;$a<$i-1;$a++){
-	$temp[$a] = array($nums[$a*7],$nums[$a*7+1],$nums[$a*7+2],$nums[$a*7+3],$nums[$a*7+4],$nums[$a*7+5],$nums[$a*7+6]);
-}
-$t = array();
-foreach($nums as $key=>$b){
-	if(($key+1)%7 == 0) continue;
-	if($b != '')
-		$t[] = $b;
-}
-$k = array_count_values ($t);
-ksort($k);
-var_dump($k);
-array_multisort($k,SORT_ASC,SORT_REGULAR);
-var_dump($k);
+preg_match_all($pattern, $contents, $ball_str);
 
+$chunk_periods = array_chunk($ball_str[1], 7);
 
-function detect_encoding($str){
-    $len = strlen($str);
-    $encoding = "utf8";
-    $is_utf8_chinese = false;
-    for ($i = 0; $i < $len; $i++) { 
-        if ( (ord($str[$i]) >> 7) > 0 ) { //非ascii字符
-            if (ord($str[$i]) <= 191 ) {
-                $encoding = "gbk0";
-                break;
-            } else if ( ord($str[$i]) <= 223 ) { //前两位为11
-                if ( empty($str[$i+1]) or  ord($str[$i+1]) >> 6 != 2 ) { //紧跟后两位为10
-                    $encoding = "gbk1";
-                    break;
-                } else {
-                    $i += 1;
-                }
-            } else if ( ord($str[$i]) <= 239 ) { //前三位为111
-                if ( empty($str[$i+1]) or  ord($str[$i+1]) >> 6 != 2 or empty($str[$i+2]) or  ord($str[$i+2]) >> 6 != 2) { //紧跟后两位为10
-                    $encoding = "gbk2";
-                    break;
-                } else {
-                    $i += 2;
-                    $is_utf8_chinese = true;
-                }
-            } else if ( ord($str[$i]) <= 247 ) { //前四位为1111
-                if ( empty($str[$i+1]) or  ord($str[$i+1]) >> 6 != 2 or empty($str[$i+2]) or  ord($str[$i+2]) >> 6 != 2 or empty($str[$i+3]) or  ord($str[$i+3]) >> 6 != 2) { //紧跟后两位为10
-                    $encoding = "gbk3";
-                    break;
-                } else {
-                    $i += 3;
-                }
-            } else if ( ord($str[$i]) <= 251 ) { //前五位为11111
-                if ( empty($str[$i+1]) or  ord($str[$i+1]) >> 6 != 2 or empty($str[$i+2]) or  ord($str[$i+2]) >> 6 != 2 or empty($str[$i+3]) or  ord($str[$i+3]) >> 6 != 2 or empty($str[$i+4]) or  ord($str[$i+4]) >> 6 != 2) { //紧跟后两位为10
-                    $encoding = "gbk4";
-                    break;
-                } else {
-                    $i += 4;
-                }
-            } else if ( ord($str[$i]) <= 253 ) { //前六位为111111
-                if ( empty($str[$i+1]) or  ord($str[$i+1]) >> 6 != 2 or empty($str[$i+2]) or  ord($str[$i+2]) >> 6 != 2 or empty($str[$i+3]) or  ord($str[$i+3]) >> 6 != 2 or empty($str[$i+4]) or  ord($str[$i+4]) >> 6 != 2 or empty($str[$i+5]) or  ord($str[$i+5]) >> 6 != 2 ) { //紧跟后两位为10
-                    $encoding = "gbk5";
-                    break;
-                } else {
-                    $i += 5;
-                }
-            } else {
-                $encoding = "gbk6";
-                break;
-            }
+$per_period_str = '';
+foreach ($chunk_periods as $per_period_arr) {
+    $red_balls = array_slice($per_period_arr, 0, 6);
+
+    $per_period_str .= $begin_period . '    ';
+    $per_period_str .= implode(',', $red_balls);
+    $per_period_str .= '|' . $per_period_arr[6] . "    ";
+    $per_period_str .= $period_arr[$begin_period]."\n";
+
+    $begin_period++;
+}
+
+file_put_contents($file, $per_period_str, FILE_APPEND);
+//将原来的文件进行倒序
+//nl 2003-2014.txt | sort -nr | cut -f2 > 2003-2014.sort.txt
+//现在是当前年份的第几天 除 7 得到到目前多少周，
+//每周 3 期，所以乘 3，得到最近的期数
+function getNowPeriod($last_period_day_arr)
+{/*{{{*/
+    $last_period_day = $last_period_day_arr[2];
+    $last_period     = $last_period_day_arr[0];
+    $open_day = array("2","4","7");
+
+    $last_date_z = date("z", strtotime($last_period_day));
+    $date_z = date("z");
+    $days = $date_z - $last_date_z;
+
+    //新年的第一天是周几
+//    $new_year_weekday = date("N",strtotime(date("Y")."-01-01"));
+    //最后一次更新是周几
+    $last_period_weekday = date("N", strtotime($last_period_day));
+
+    //不可以连续更新
+    if(in_array($last_period_weekday, $open_day) && $days == 1){
+        return 0;
+    }
+
+    $cycles_num = floor(($date_z - $last_date_z)/7);
+
+    //过多的时间进行分割
+    $miss_cycle = 0;
+    switch ($days % 7){/*{{{*/
+    case 1:
+        if($last_period_weekday == 2){
+            $miss_cycle = 1;
         }
+        break;
+    case 2:
+        if($last_period_weekday == 2){
+            $miss_cycle = 0;
+        }
+        break;
+    case 3:
+        if($last_period_weekday == 4){
+            $miss_cycle = 0;
+        }else{
+            $miss_cycle = 1;
+        }
+        break;
+    case 4:
+        $miss_cycle = 1;
+        break;
+    case 5:
+        if($last_period_weekday == 7){
+            $miss_cycle = 2;
+        }else{
+            $miss_cycle = 1;
+        }
+        break;
+    case 6:
+        $miss_cycle = 2;
+        break;
+    default:
+        $miss_cycle = 0;
+        break;
+    }/*}}}*/
+
+    $now_period = 0;
+    switch ($last_period_weekday) {/*{{{*/
+    case 2:
+        $tmp_num     = 1;
+        $tmp_days    = 2;
+        break;
+    case 4:
+        $tmp_num     = 3;
+        $tmp_days    = 3;
+        break;
+    case 7:
+        $tmp_num     = 2;
+        $tmp_days    = 2;
+        break;
+    }/*}}}*/
+
+    $product    = 0;
+    $now_period = array();
+
+    for ($i = 0; $i < ($cycles_num * 3 + $miss_cycle); $i ++) {
+        if ($i == $tmp_num) {
+            $tmp_num = $i + 3;
+            $product++;
+        }
+        $days_num                 = (2 * $i) + $tmp_days + $product;
+        $periods_num              = $last_period + $i + 1;
+        $now_period[$periods_num] = date("Y-m-d",strtotime("$last_period_day +$days_num day"));
     }
- 
-    if ($is_utf8_chinese == false){
-        $encoding = "gbk10";
+
+    return $now_period;
+}/*}}}*/
+
+//从已经得到的数据中获取最后一次的期数
+function getLastPeriod($file)
+{/*{{{*/
+    $fp = fopen($file, 'r');
+    while ($buf = fgets($fp)) {
+        $res = $buf;
     }
-    if ($encoding == "utf8" && preg_match("/^[".chr(0xa1)."-".chr(0xff)."\x20-\x7f]+$/", $str) && !preg_match("/^[\x{4e00}-\x{9fa5}\x20-\x7f]+$/u", $str)) {
-        $encoding = "gbk7";
+    fclose($fp);
+    $last_period_arr = explode("    ", $res);
+    return $last_period_arr;
+}/*}}}*/
+
+function getPeriodDate($period_num)
+{/*{{{*/
+    $period_date = '';
+    $date_w = date("N");
+    switch ($date_w) {
+    case '7':
+        case '1':
+            $period_date = date("Y-m-d", strtotime("-$period_num Sunday"));
+            break;
+        case '2':
+            case '3':
+                $period_date = date("Y-m-d", strtotime("-$period_num Tuesday"));
+                break;
+            case '4':
+                case '5':
+                    case '6':
+                        $period_date = date("Y-m-d", strtotime("-$period_num Thursday"));
+                        break;
     }
-    //echo $encoding;
-    if ($encoding == "utf8") {
-        //echo "utf8";
-        return ($str == "鏈條" || $str == "瑷媄")? $str: mb_convert_encoding($str, "gbk", "utf8");
-    } else {
-        //echo "gbk";
-        return $str;
-    }
-}
+    return $period_date;
+}/*}}}*/

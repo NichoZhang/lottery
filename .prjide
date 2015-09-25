@@ -1,5 +1,7 @@
 lottery=$PWD CD=. {
  data=data {
+  2003-2014.arr.txt
+  2003-2014.sort.txt
   2003-2014.txt
   2003-2015.csv
   2003-2015.xls
@@ -30,6 +32,7 @@ lottery=$PWD CD=. {
   2015.bak.txt
   2015.txt
   2015.xls
+  account.txt
   all_hitory_hit150320.csv
   all_hitory_hit150320.txt
   all_hitory_hit150323.csv
@@ -62,35 +65,22 @@ lottery=$PWD CD=. {
   red_balls_site_rate20150108.php
  }
  php=php {
-  eighth.php
-  eighth20140808.php
-  eighth20140812.php
-  eighth20140813.php
-  eighth20150105.php
-  fifth.php
-  fourth.php
-  fourth20140808.php
-  fourth20140812.php
-  fourth20140813.php
-  fourth20150105.php
-  hit_history.php
-  index.php
-  new_data.php
-  nineth20140808.php
-  second.php
-  seventh.php
-  seventh20140808.php
-  seventh20140812.php
-  seventh20140813.php
-  seventh20150105.php
-  sixth.php
-  sixth20150108.php
-  third.php
   rate=rate {
    next_blue_ball_rate.php
   }
- }
- tool=tool {
-  in.vim
+  step=step {
+   index.php
+   first.php
+   second.php
+   third.php
+   fourth.php
+   fifth.php
+   sixth.php
+   seventh.php
+   eighth.php
+   hit_history.php
+   new_data.php
+   nineth20140808.php
+  }
  }
 }
