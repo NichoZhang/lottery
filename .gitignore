@@ -1,6 +1,4 @@
 # 此为注释 - 将被Git忽略
-# 忽略所有 .a 结尾的文件
-*.a
 # 但 lib.a 除外
 !lib.a
 # 仅仅忽略项目根目录下的 TODO 文件，不包括 subdir/TODO
@@ -11,5 +9,7 @@ build/
 doc/*.txt
 # 忽略所有 ~ 结尾的文件
 *~
+*.swp
+tags
 # 忽略netbeans创建的项目目录
 /nbproject/private/

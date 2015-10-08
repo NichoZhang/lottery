@@ -1,6 +1,6 @@
 <?php
 $file_get_path = __DIR__.'/../../data/2003-2014.sort.txt';
-$file_put_path = __DIR__.'/../../data/2003-2014.arr.txt';
+$file_put_path = __DIR__.'/../../data/2003-2014.arr.php';
 
 $contents = file_get_contents($file_get_path);
 

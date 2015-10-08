@@ -1,5 +1,6 @@
 lottery=$PWD CD=. {
  data=data {
+  2003-2014.arr.php
   2003-2014.arr.txt
   2003-2014.sort.txt
   2003-2014.txt
@@ -36,6 +37,7 @@ lottery=$PWD CD=. {
   all_hitory_hit150320.csv
   all_hitory_hit150320.txt
   all_hitory_hit150323.csv
+  all_red_balls_count.arr.php
   blue_balls_rate.php
   blue_balls_rate20150422040830.php
   data.php
@@ -81,6 +83,8 @@ lottery=$PWD CD=. {
    hit_history.php
    new_data.php
    nineth20140808.php
+   tenth.php
+   eleven.php
   }
  }
 }

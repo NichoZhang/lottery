@@ -9,7 +9,7 @@ $end_period_arr   = array_slice($period_arr, -1, count($period_arr), true);
 $each_end_period  = each($end_period_arr);
 
 $begin_period = $begin_period_arr['key'];
-$end_period   = $each_end_period['key'];
+$end_period   = $each_end_period['key'] - 1;
 
 if (($end_period - $begin_period) <= 0) {
     return;
